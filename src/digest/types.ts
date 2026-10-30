@@ -16,6 +16,7 @@ export type Night = {
   night: string;
   rows: DigestRow[];
   badLines: number;
+  counts: Record<RunStatus, number>;
 };
 
 // null when runs/<night>.jsonl does not exist.
