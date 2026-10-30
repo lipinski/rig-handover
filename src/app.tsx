@@ -30,5 +30,12 @@ export function createApp(config: RigConfig = loadConfig()) {
     );
   });
 
+  // Same reader, same rows, same order as the page (ADR 0001).
+  app.get('/api/digest/:night', (c) => {
+    const night = readNight(config.runsDir, c.req.param('night'));
+    if (!night) return c.json({ error: 'no such night' }, 404);
+    return c.json(night);
+  });
+
   return app;
 }
