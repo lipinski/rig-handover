@@ -12,13 +12,15 @@ export function createApp(config: RigConfig = loadConfig()) {
 
   app.get('/health', (c) => c.json({ ok: true, lane: lane().id }));
 
-  app.get('/', (c) =>
-    c.html(
+  app.get('/', (c) => {
+    const status = readStatus(config);
+    const digests = Object.fromEntries(status.nights.map((n) => [n, readNight(config.runsDir, n)]));
+    return c.html(
       <Layout title="status" lane={lane()}>
-        <StatusBoard status={readStatus(config)} />
+        <StatusBoard status={status} digests={digests} />
       </Layout>,
-    ),
-  );
+    );
+  });
 
   app.get('/digest/:night', (c) => {
     const night = readNight(config.runsDir, c.req.param('night'));
